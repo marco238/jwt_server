@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-
 const mongoose = require('mongoose');
+
 const db = "mongodb://jwtuser:jwtuser1@ds135068.mlab.com:35068/jwt_db";
+const registerUser = require('../controllers/user.controller');
 
 const mongoClientOptions = {
   useNewUrlParser: true,
@@ -18,7 +19,9 @@ mongoose.connect(db, mongoClientOptions, err => {
 })
 
  router.get('/', (req, res) => {
-    res.send('Hello from API route');
+   res.send('Hello from API route');
  })
+
+ router.post('/register', registerUser)
 
  module.exports = router;
