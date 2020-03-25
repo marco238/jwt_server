@@ -26,13 +26,19 @@ module.exports.loginUser = (req, res) => {
       if(!user) {
         res.status(401).send('Invalid Credentials');
       } else {
-        if(user.password !== userData.password) {
-          res.status(401).send('Invalid Credentials');
-        } else {
-          let payload = { subject: user._id };
-          let token = jwt.sign(payload, 'supersecretkey');
-          res.status(200).send({token});
-        }
+        user.checkPassword(userData.password)
+          .then(response => {
+            if(response) {
+              let payload = { subject: user._id };
+              let token = jwt.sign(payload, 'supersecretkey');
+              res.status(200).send({token});
+            } else {
+              res.status(401).send('Invalid Credentials');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          })
       }
     }
   })
